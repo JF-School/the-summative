@@ -8,9 +8,12 @@ namespace the_summative
 {
     public class Game1 : Game
     {
-        Texture2D nasaTexture, spaceXTexture, introBackTexture, spaceBackTexture, launchTexture, landTexture;
-        Rectangle window, nasaRect, spaceXRect, launchRect;
+        Texture2D nasaTexture, spaceXTexture, introBackTexture, spaceBackTexture, launchTexture, 
+            landTexture, mercuryTexture, venusTexture, earthTexture, marsTexture, sunTexture;
+        Rectangle window, nasaRect, spaceXRect, launchRect, mercuryRect, venusRect, earthRect,
+            marsRect, sunRect;
         Vector2 nasaSpeed, spaceXSpeed;
+        SpriteFont planetFont;
 
         float seconds;
 
@@ -53,9 +56,12 @@ namespace the_summative
             nasaRect = new Rectangle(500, 200, 152, 410);
             spaceXRect = new Rectangle(150, 200, 92, 410);
             launchRect = new Rectangle(275, 200, 250, 250);
+            mercuryRect = new Rectangle(75, 100, 150, 150);
+            venusRect = new Rectangle(300, 100, 150, 150);
+            marsRect = new Rectangle(525, 100, 150, 150);
 
-            nasaSpeed = new Vector2(0, 2);
-            spaceXSpeed = new Vector2(0, 2);
+            nasaSpeed = new Vector2(0, 4);
+            spaceXSpeed = new Vector2(0, 4);
 
             screen = Screen.Intro;
         }
@@ -70,9 +76,16 @@ namespace the_summative
             spaceXTexture = Content.Load<Texture2D>("spacexrocket");
             landTexture = Content.Load<Texture2D>("landbutton");
             launchTexture = Content.Load<Texture2D>("launchbutton");
+            sunTexture = Content.Load<Texture2D>("sun");
+            mercuryTexture = Content.Load<Texture2D>("mercury");
+            venusTexture = Content.Load<Texture2D>("venus");
+            earthTexture = Content.Load<Texture2D>("earth");
+            marsTexture = Content.Load<Texture2D>("mars");
 
             introBackTexture = Content.Load<Texture2D>("nasawins");
             spaceBackTexture = Content.Load<Texture2D>("spacebackground");
+
+            planetFont = Content.Load<SpriteFont>("planetFont");
         }
 
         protected override void Update(GameTime gameTime)
@@ -87,10 +100,6 @@ namespace the_summative
             mouseState = Mouse.GetState();
             if (screen == Screen.Intro)
             {
-                if (nasaRect.Y == window.Height || spaceXRect.Y == window.Height)
-                {
-                    screen = Screen.Space;
-                }
                 if (mouseState.LeftButton == ButtonState.Pressed)
                 {
                     if (launchRect.Contains(mouseState.Position))
@@ -100,7 +109,29 @@ namespace the_summative
                         spaceXRect.X -= (int)spaceXSpeed.X;
                         spaceXRect.Y -= (int)spaceXSpeed.Y;
                     }
-                    
+
+                }
+                if (nasaRect.Bottom < 0 || spaceXRect.Bottom < 0)
+                {
+                    screen = Screen.Space;
+                }
+            }
+            if (screen == Screen.Space)
+            {
+                if (mouseState.LeftButton == ButtonState.Pressed)
+                {
+                    if (mercuryRect.Contains(mouseState.Position))
+                    {
+                        screen = Screen.Mercury;
+                    }
+                    if (venusRect.Contains(mouseState.Position))
+                    {
+                        screen = Screen.Venus;
+                    }
+                    if (marsRect.Contains(mouseState.Position))
+                    {
+                        screen = Screen.Mars;
+                    }
                 }
             }
 
@@ -126,6 +157,10 @@ namespace the_summative
             if (screen == Screen.Space)
             {
                 _spriteBatch.Draw(spaceBackTexture, window, Color.White);
+                _spriteBatch.Draw(mercuryTexture, mercuryRect, Color.White);
+                _spriteBatch.Draw(venusTexture, venusRect, Color.White);
+                _spriteBatch.Draw(marsTexture, marsRect, Color.White);
+                _spriteBatch.DrawString(planetFont, ("Pick a Planet!"), new Vector2(300, 400), Color.White);
             }
 
             _spriteBatch.End();
