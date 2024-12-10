@@ -8,8 +8,9 @@ namespace the_summative
 {
     public class Game1 : Game
     {
-        Texture2D nasaTexture, spaceXTexture, introBackTexture, spaceBackTexture, launchTexture, 
-            landTexture, mercuryTexture, venusTexture, earthTexture, marsTexture, sunTexture;
+        Texture2D nasaTexture, spaceXTexture, introBack, spaceBack, launchTexture, 
+            landTexture, mercuryTexture, venusTexture, earthTexture, marsTexture, sunTexture, 
+            mercuryBack;
         Rectangle window, nasaRect, spaceXRect, launchRect, mercuryRect, venusRect, earthRect,
             marsRect, sunRect;
         Vector2 nasaSpeed, spaceXSpeed;
@@ -82,8 +83,9 @@ namespace the_summative
             earthTexture = Content.Load<Texture2D>("earth");
             marsTexture = Content.Load<Texture2D>("mars");
 
-            introBackTexture = Content.Load<Texture2D>("nasawins");
-            spaceBackTexture = Content.Load<Texture2D>("spacebackground");
+            introBack = Content.Load<Texture2D>("nasawins");
+            spaceBack = Content.Load<Texture2D>("spacebackground");
+            mercuryBack = Content.Load<Texture2D>("mercurybackground");
 
             planetFont = Content.Load<SpriteFont>("planetFont");
         }
@@ -96,6 +98,8 @@ namespace the_summative
             // TODO: Add your update logic here
 
             base.Update(gameTime);
+
+            this.Window.Title = $"x = {mouseState.X}, y = {mouseState.Y}";
 
             mouseState = Mouse.GetState();
             if (screen == Screen.Intro)
@@ -123,6 +127,12 @@ namespace the_summative
                     if (mercuryRect.Contains(mouseState.Position))
                     {
                         screen = Screen.Mercury;
+                        nasaRect.Width = 30;
+                        nasaRect.Height = 82;
+                        nasaRect.X = 703;
+                        nasaRect.Y = -146;
+                        nasaSpeed.X = 0;
+                        nasaSpeed.Y = 3;
                     }
                     if (venusRect.Contains(mouseState.Position))
                     {
@@ -132,6 +142,15 @@ namespace the_summative
                     {
                         screen = Screen.Mars;
                     }
+                }
+            }
+            if (screen == Screen.Mercury)
+            {
+                nasaRect.X += (int)nasaSpeed.X;
+                nasaRect.Y += (int)nasaSpeed.Y;
+                if (nasaRect.Bottom > 240)
+                {
+                    screen = Screen.Outro;
                 }
             }
 
@@ -149,18 +168,24 @@ namespace the_summative
 
             if (screen == Screen.Intro)
             {
-                _spriteBatch.Draw(introBackTexture, window, Color.White);
+                _spriteBatch.Draw(introBack, window, Color.White);
                 _spriteBatch.Draw(nasaTexture, nasaRect, Color.White);
                 _spriteBatch.Draw(spaceXTexture, spaceXRect, Color.White);
                 _spriteBatch.Draw(launchTexture, launchRect, Color.White);
             }
             if (screen == Screen.Space)
             {
-                _spriteBatch.Draw(spaceBackTexture, window, Color.White);
+                _spriteBatch.Draw(spaceBack, window, Color.White);
                 _spriteBatch.Draw(mercuryTexture, mercuryRect, Color.White);
                 _spriteBatch.Draw(venusTexture, venusRect, Color.White);
                 _spriteBatch.Draw(marsTexture, marsRect, Color.White);
                 _spriteBatch.DrawString(planetFont, ("Pick a Planet!"), new Vector2(300, 400), Color.White);
+            }
+            if (screen == Screen.Mercury)
+            {
+                _spriteBatch.Draw(mercuryBack, window, Color.White);
+                _spriteBatch.Draw(nasaTexture, nasaRect, Color.White);
+                
             }
 
             _spriteBatch.End();
