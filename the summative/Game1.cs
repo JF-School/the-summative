@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Runtime.CompilerServices;
@@ -10,13 +11,14 @@ namespace the_summative
     {
         Texture2D nasaTexture, spaceXTexture, introBack, spaceBack, launchTexture, 
             landTexture, mercuryTexture, venusTexture, earthTexture, marsTexture, sunTexture, 
-            mercuryBack;
+            mercuryBack, mercury2Back, expTexture;
         Rectangle window, nasaRect, spaceXRect, launchRect, mercuryRect, venusRect, earthRect,
-            marsRect, sunRect;
+            marsRect, sunRect, expRect;
         Vector2 nasaSpeed, spaceXSpeed;
         SpriteFont planetFont;
 
-        float seconds;
+        // change back to 3 seconds
+        float seconds = 1f;
 
         MouseState mouseState, prevMouseState;
 
@@ -24,10 +26,10 @@ namespace the_summative
         {
             Intro,
             Space,
-            Moon,
-            Mars,
-            Venus,
             Mercury,
+            Mercury2,
+            Venus,
+            Mars,
             Outro
         }
         Screen screen;
@@ -60,6 +62,7 @@ namespace the_summative
             mercuryRect = new Rectangle(75, 100, 150, 150);
             venusRect = new Rectangle(300, 100, 150, 150);
             marsRect = new Rectangle(525, 100, 150, 150);
+            expRect = new Rectangle(-35, 300, 240, 240);
 
             nasaSpeed = new Vector2(0, 4);
             spaceXSpeed = new Vector2(0, 4);
@@ -82,10 +85,12 @@ namespace the_summative
             venusTexture = Content.Load<Texture2D>("venus");
             earthTexture = Content.Load<Texture2D>("earth");
             marsTexture = Content.Load<Texture2D>("mars");
+            expTexture = Content.Load<Texture2D>("boom");
 
             introBack = Content.Load<Texture2D>("nasawins");
             spaceBack = Content.Load<Texture2D>("spacebackground");
             mercuryBack = Content.Load<Texture2D>("mercurybackground");
+            mercury2Back = Content.Load<Texture2D>("mercurybackground2");
 
             planetFont = Content.Load<SpriteFont>("planetFont");
         }
@@ -102,6 +107,7 @@ namespace the_summative
             this.Window.Title = $"x = {mouseState.X}, y = {mouseState.Y}";
 
             mouseState = Mouse.GetState();
+            // screens yay
             if (screen == Screen.Intro)
             {
                 if (mouseState.LeftButton == ButtonState.Pressed)
@@ -127,12 +133,19 @@ namespace the_summative
                     if (mercuryRect.Contains(mouseState.Position))
                     {
                         screen = Screen.Mercury;
-                        nasaRect.Width = 30;
-                        nasaRect.Height = 82;
+                        nasaRect.Width = 60;
+                        nasaRect.Height = 164;
                         nasaRect.X = 703;
                         nasaRect.Y = -146;
                         nasaSpeed.X = 0;
                         nasaSpeed.Y = 3;
+
+                        spaceXRect.Width = 36;
+                        spaceXRect.Height = 164;
+                        spaceXRect.X = 60;
+                        spaceXRect.Y = -145;
+                        spaceXSpeed.X = 0;
+                        spaceXSpeed.Y = 4;
                     }
                     if (venusRect.Contains(mouseState.Position))
                     {
@@ -148,10 +161,28 @@ namespace the_summative
             {
                 nasaRect.X += (int)nasaSpeed.X;
                 nasaRect.Y += (int)nasaSpeed.Y;
+                spaceXRect.X += (int)spaceXSpeed.X;
+                spaceXRect.Y += (int)spaceXSpeed.Y;
                 if (nasaRect.Bottom > 240)
                 {
-                    screen = Screen.Outro;
+                    nasaSpeed.Y = 0;
                 }
+                if (spaceXRect.Bottom > 512)
+                {
+                    spaceXSpeed.Y = 0;
+                    seconds -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (seconds <= 0)
+                    {
+                        screen = Screen.Mercury2;
+                    }
+                }
+            }
+            if (screen == Screen.Mercury2)
+            {
+                nasaRect.X = 263;
+                nasaRect.Y = -300;
+                nasaRect.Width = 228;
+                nasaRect.Height = 615;
             }
 
         }
@@ -185,7 +216,16 @@ namespace the_summative
             {
                 _spriteBatch.Draw(mercuryBack, window, Color.White);
                 _spriteBatch.Draw(nasaTexture, nasaRect, Color.White);
-                
+                _spriteBatch.Draw(spaceXTexture, spaceXRect, null, Color.White, 0f, Vector2.Zero, SpriteEffects.FlipVertically, 1f);
+                if (spaceXRect.Bottom > 512)
+                {
+                    _spriteBatch.Draw(expTexture, expRect, Color.White);
+                }
+            }
+            if (screen == Screen.Mercury2)
+            {
+                _spriteBatch.Draw(mercury2Back, window, Color.White);
+                _spriteBatch.Draw(nasaTexture, nasaRect, Color.White);
             }
 
             _spriteBatch.End();
