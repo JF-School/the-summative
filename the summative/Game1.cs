@@ -11,14 +11,15 @@ namespace the_summative
     {
         Texture2D nasaTexture, spaceXTexture, introBack, spaceBack, launchTexture, 
             landTexture, mercuryTexture, venusTexture, earthTexture, marsTexture, sunTexture, 
-            mercuryBack, mercury2Back, expTexture;
+            mercuryBack, mercury2Back, expTexture, astroTexture, fireTexture;
         Rectangle window, nasaRect, spaceXRect, launchRect, mercuryRect, venusRect, earthRect,
-            marsRect, sunRect, expRect;
+            marsRect, sunRect, expRect, astroRect, fireRect;
         Vector2 nasaSpeed, spaceXSpeed;
         SpriteFont planetFont;
 
         // change back to 3 seconds
-        float seconds = 1f;
+        float seconds = 3f, seconds2 = 3f;
+        bool fire = true;
 
         MouseState mouseState, prevMouseState;
 
@@ -63,6 +64,8 @@ namespace the_summative
             venusRect = new Rectangle(300, 100, 150, 150);
             marsRect = new Rectangle(525, 100, 150, 150);
             expRect = new Rectangle(-35, 300, 240, 240);
+            astroRect = new Rectangle(334, 338, 58, 80);
+            fireRect = new Rectangle(227, 146, 329, 400);
 
             nasaSpeed = new Vector2(0, 4);
             spaceXSpeed = new Vector2(0, 4);
@@ -86,6 +89,8 @@ namespace the_summative
             earthTexture = Content.Load<Texture2D>("earth");
             marsTexture = Content.Load<Texture2D>("mars");
             expTexture = Content.Load<Texture2D>("boom");
+            astroTexture = Content.Load<Texture2D>("astronaut");
+            fireTexture = Content.Load<Texture2D>("firepic");
 
             introBack = Content.Load<Texture2D>("nasawins");
             spaceBack = Content.Load<Texture2D>("spacebackground");
@@ -183,6 +188,11 @@ namespace the_summative
                 nasaRect.Y = -300;
                 nasaRect.Width = 228;
                 nasaRect.Height = 615;
+                seconds2 -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (seconds2 <= 0)
+                {
+                    fire = false;
+                }
             }
 
         }
@@ -226,6 +236,11 @@ namespace the_summative
             {
                 _spriteBatch.Draw(mercury2Back, window, Color.White);
                 _spriteBatch.Draw(nasaTexture, nasaRect, Color.White);
+                _spriteBatch.Draw(astroTexture, astroRect, Color.White);
+                if (!fire)
+                {
+                    _spriteBatch.Draw(fireTexture, fireRect, Color.White);
+                }
             }
 
             _spriteBatch.End();
