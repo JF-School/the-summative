@@ -164,6 +164,18 @@
 /processorParam:TextureFormat=Compressed
 /build:planetFont.spritefont
 
+#begin robloxhi.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:robloxhi.wav
+
+#begin RobloxRAIG.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:RobloxRAIG.wav
+
 #begin spacebackground.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -211,4 +223,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:venus.png
+
+#begin X:/My Drive/Downloads/rocketlaunch.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:X:/My Drive/Downloads/rocketlaunch.wav;rocketlaunch.wav
 

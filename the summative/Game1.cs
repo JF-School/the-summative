@@ -16,10 +16,13 @@ namespace the_summative
             marsRect, sunRect, expRect, astroRect, fireRect;
         Vector2 nasaSpeed, spaceXSpeed;
         SpriteFont planetFont;
+        SoundEffect rocketSound, hiSound, screamSound;
+        SoundEffectInstance rocketSoundInstance, hiSoundInstance, screamSoundInstance;
 
         // change back to 3 seconds
-        float seconds = 3f, seconds2 = 3f;
-        bool fire = true;
+        float seconds = 3f, seconds2 = 1f, seconds3 = 3f;
+        bool fire = true, astro = true;
+        bool mercuryDeath, venusDeath, marsDeath;
 
         MouseState mouseState, prevMouseState;
 
@@ -79,6 +82,7 @@ namespace the_summative
 
             // TODO: use this.Content to load your game content here
 
+            // image textures
             nasaTexture = Content.Load<Texture2D>("nasarocket");
             spaceXTexture = Content.Load<Texture2D>("spacexrocket");
             landTexture = Content.Load<Texture2D>("landbutton");
@@ -92,12 +96,22 @@ namespace the_summative
             astroTexture = Content.Load<Texture2D>("astronaut");
             fireTexture = Content.Load<Texture2D>("firepic");
 
+            // background textures
             introBack = Content.Load<Texture2D>("nasawins");
             spaceBack = Content.Load<Texture2D>("spacebackground");
             mercuryBack = Content.Load<Texture2D>("mercurybackground");
             mercury2Back = Content.Load<Texture2D>("mercurybackground2");
 
+            // text
             planetFont = Content.Load<SpriteFont>("planetFont");
+
+            // sound effects
+            rocketSound = Content.Load<SoundEffect>("rocketlaunch");
+            rocketSoundInstance = rocketSound.CreateInstance();
+            hiSound = Content.Load<SoundEffect>("robloxhi");
+            hiSoundInstance = hiSound.CreateInstance();
+            screamSound = Content.Load<SoundEffect>("RobloxRAIG");
+            screamSoundInstance = screamSound.CreateInstance();
         }
 
         protected override void Update(GameTime gameTime)
@@ -164,6 +178,7 @@ namespace the_summative
             }
             if (screen == Screen.Mercury)
             {
+                rocketSoundInstance.Play();
                 nasaRect.X += (int)nasaSpeed.X;
                 nasaRect.Y += (int)nasaSpeed.Y;
                 spaceXRect.X += (int)spaceXSpeed.X;
@@ -184,14 +199,33 @@ namespace the_summative
             }
             if (screen == Screen.Mercury2)
             {
+                rocketSoundInstance.Stop();
                 nasaRect.X = 263;
                 nasaRect.Y = -300;
                 nasaRect.Width = 228;
                 nasaRect.Height = 615;
+                // astronaut spawning
                 seconds2 -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (seconds2 <= 0)
+                if (seconds2 <= 0 && astro)
+                {
+                    hiSoundInstance.Play();
+                    astro = false;
+                }
+                // fire spawning
+                seconds3 -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (seconds3 <= 0 && fire)
                 {
                     fire = false;
+                    screamSoundInstance.Play();
+
+                }
+                if (!fire)
+                {
+                    if (screamSoundInstance.State == SoundState.Stopped)
+                    {
+                        screen = Screen.Outro;
+                        mercuryDeath = true;
+                    }
                 }
             }
 
@@ -236,7 +270,11 @@ namespace the_summative
             {
                 _spriteBatch.Draw(mercury2Back, window, Color.White);
                 _spriteBatch.Draw(nasaTexture, nasaRect, Color.White);
-                _spriteBatch.Draw(astroTexture, astroRect, Color.White);
+                if (!astro)
+                {
+                    _spriteBatch.Draw(astroTexture, astroRect, Color.White);
+                }
+                
                 if (!fire)
                 {
                     _spriteBatch.Draw(fireTexture, fireRect, Color.White);
