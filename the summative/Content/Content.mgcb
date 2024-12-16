@@ -25,6 +25,18 @@
 /processorParam:TextureFormat=Color
 /build:astronaut.png
 
+#begin BHdeathscreen.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:BHdeathscreen.jpg
+
 #begin boom.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -36,6 +48,13 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:boom.png
+
+#begin codFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:codFont.spritefont
 
 #begin earth.png
 /importer:TextureImporter
@@ -163,6 +182,18 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:planetFont.spritefont
+
+#begin quit.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:quit.png
 
 #begin robloxhi.wav
 /importer:WavImporter

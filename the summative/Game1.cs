@@ -11,11 +11,12 @@ namespace the_summative
     {
         Texture2D nasaTexture, spaceXTexture, introBack, spaceBack, launchTexture, 
             landTexture, mercuryTexture, venusTexture, earthTexture, marsTexture, sunTexture, 
-            mercuryBack, mercury2Back, expTexture, astroTexture, fireTexture;
+            mercuryBack, mercury2Back, expTexture, astroTexture, fireTexture, outroBack,
+            quitTexture;
         Rectangle window, nasaRect, spaceXRect, launchRect, mercuryRect, venusRect, earthRect,
-            marsRect, sunRect, expRect, astroRect, fireRect;
+            marsRect, sunRect, expRect, astroRect, fireRect, quitRect;
         Vector2 nasaSpeed, spaceXSpeed;
-        SpriteFont planetFont;
+        SpriteFont planetFont, codFont;
         SoundEffect rocketSound, hiSound, screamSound;
         SoundEffectInstance rocketSoundInstance, hiSoundInstance, screamSoundInstance;
 
@@ -69,6 +70,7 @@ namespace the_summative
             expRect = new Rectangle(-35, 300, 240, 240);
             astroRect = new Rectangle(334, 338, 58, 80);
             fireRect = new Rectangle(227, 146, 329, 400);
+            quitRect = new Rectangle(300, 300, 200, 80);
 
             nasaSpeed = new Vector2(0, 4);
             spaceXSpeed = new Vector2(0, 4);
@@ -95,15 +97,18 @@ namespace the_summative
             expTexture = Content.Load<Texture2D>("boom");
             astroTexture = Content.Load<Texture2D>("astronaut");
             fireTexture = Content.Load<Texture2D>("firepic");
+            quitTexture = Content.Load<Texture2D>("quit");
 
             // background textures
             introBack = Content.Load<Texture2D>("nasawins");
             spaceBack = Content.Load<Texture2D>("spacebackground");
             mercuryBack = Content.Load<Texture2D>("mercurybackground");
             mercury2Back = Content.Load<Texture2D>("mercurybackground2");
+            outroBack = Content.Load<Texture2D>("BHdeathscreen");
 
             // text
             planetFont = Content.Load<SpriteFont>("planetFont");
+            codFont = Content.Load<SpriteFont>("codFont");
 
             // sound effects
             rocketSound = Content.Load<SoundEffect>("rocketlaunch");
@@ -228,6 +233,16 @@ namespace the_summative
                     }
                 }
             }
+            if (screen == Screen.Outro)
+            {
+                if (mouseState.LeftButton == ButtonState.Pressed)
+                {
+                    if (quitRect.Contains(mouseState.Position))
+                    {
+                        Exit();
+                    }
+                }
+            }
 
         }
 
@@ -279,6 +294,15 @@ namespace the_summative
                 {
                     _spriteBatch.Draw(fireTexture, fireRect, Color.White);
                 }
+            }
+            if (screen == Screen.Outro)
+            {
+                _spriteBatch.Draw(outroBack, window, Color.White);
+                if (mercuryDeath)
+                {
+                    _spriteBatch.DrawString(codFont, ("Cause of Death: Mercury Heat"), new Vector2(150, 100), Color.White);
+                }
+                _spriteBatch.Draw(quitTexture, quitRect, Color.White);
             }
 
             _spriteBatch.End();
